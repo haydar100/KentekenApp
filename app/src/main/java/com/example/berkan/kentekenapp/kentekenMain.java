@@ -6,6 +6,8 @@ import android.sax.Element;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -20,6 +22,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.concurrent.ExecutionException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -32,8 +35,8 @@ import javax.xml.transform.stream.StreamResult;
 
 
 public class kentekenMain extends Activity {
+    Auto b = null;
 
-    JSONParser jParser = new JSONParser();
 
 
     public static final void leesbaar(Document xml) throws Exception {
@@ -56,16 +59,37 @@ public class kentekenMain extends Activity {
 
 
     @Override
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        new JSONParser().execute();
+
+
         setContentView(R.layout.activity_kenteken_main);
+
+
         // getCar("57ZHD2");
         // getCar("9THK73");
 
-        // requestWebService("https://api.datamarket.azure.com/Data.ashx/opendata.rdw/VRTG.Open.Data/v1/KENT_VRTG_O_DAT('57ZHD2')?$format=json")
+        // requestWebService("https://api.datamarket.azure.com/Data.ashx/opendata.rdw/VRTG.Open.Data/v1/KENT_VRTG_O_DAT('')?$format=json")
 
         //https://api.datamarket.azure.com/Data.ashx/opendata.rdw/VRTG.Open.Data/v1/KENT_VRTG_O_DAT('57ZHD2')?$format=json
+    }
+
+    public void OK(View v) {
+        EditText ingevuldeKenteken = (EditText) findViewById(R.id.vulKenteken);
+        EditText editText = (EditText) findViewById(R.id.getMerk);
+
+        try {
+            System.out.println(String.valueOf(ingevuldeKenteken));
+            String xyz = ingevuldeKenteken.getText().toString();
+            b = new JSONParser().execute(xyz).get();
+            editText.setText(b.toString());
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

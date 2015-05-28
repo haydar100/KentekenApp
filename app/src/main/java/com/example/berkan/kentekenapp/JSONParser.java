@@ -20,7 +20,7 @@ import java.util.Scanner;
 /**
  * Created by Haydar on 28-05-15.
  */
-public class JSONParser extends AsyncTask<String, String, String> {
+public class JSONParser extends AsyncTask<String, String, Auto> {
 
     public JSONParser() {
 
@@ -82,20 +82,23 @@ public class JSONParser extends AsyncTask<String, String, String> {
     }
 
     @Override
-    protected String doInBackground(String... strings) {
+    protected Auto doInBackground(String... strings) {
+        String kenteken = strings[0];
 
         JSONObject json = null;
         try {
-            json = JSONParser.requestWebService("https://api.datamarket.azure.com/Data.ashx/opendata.rdw/VRTG.Open.Data/v1/KENT_VRTG_O_DAT('57ZHD2')?$format=json").getJSONObject("d");
+            json = JSONParser.requestWebService("https://api.datamarket.azure.com/Data.ashx/opendata.rdw/VRTG.Open.Data/v1/KENT_VRTG_O_DAT('" + kenteken + "')?$format=json").getJSONObject("d");
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        String kenteken = json.optString("Kenteken");
+        String kentteken1 = json.optString("Kenteken");
         String merk = json.optString("Merk");
         String Aantalzitplaatsen = json.optString("Aantalzitplaatsen");
         String test = "test";
-        return null;
+        Auto a = new Auto(kentteken1, merk);
+        return a;
     }
+
 
     private String getNodeAttributeByTagName(Node parentNode, String tagNameOfAttr) {
         String nodeValue = "";
