@@ -2,10 +2,15 @@ package com.example.berkan.kentekenapp;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.sax.Element;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
@@ -15,6 +20,7 @@ import java.io.Writer;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -31,14 +37,32 @@ public class kentekenMain extends Activity {
 
 
 
+    public static final void leesbaar(Document xml) throws Exception {
+        Transformer tf = TransformerFactory.newInstance().newTransformer();
+        tf.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+        tf.setOutputProperty(OutputKeys.INDENT, "yes");
+        Writer out = new StringWriter();
+        tf.transform(new DOMSource(xml), new StreamResult(out));
+        System.out.println(out.toString());
+
+    }
+
+    private static String getTagValue(String sTag, Element eElement) {
+        NodeList nlList = ((Document) eElement).getElementsByTagName(sTag).item(0).getChildNodes();
+
+        Node nValue = (Node) nlList.item(0);
+
+        return nValue.getNodeValue();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_kenteken_main);
         getCar("57ZHD2");
+        getCar("9THK73");
 
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -79,9 +103,29 @@ public class kentekenMain extends Activity {
                         db = dbf.newDocumentBuilder();
                     } catch (ParserConfigurationException e) {
                         e.printStackTrace();
-                    } try {
+                    }
+                    try {
                         Document doc = db.parse(xml);
-                       leesbaar(doc);
+                        doc.getDocumentElement().normalize();
+                        NodeList nList = doc.getElementsByTagName("m:properties").item(0).getChildNodes();
+                        HashMap<String, String> values = new HashMap<String, String>();
+
+                        for (int i = 0; i < nList.getLength(); i++) {
+
+                            Node propertiesNode = nList.item(i);
+                            System.out.println(propertiesNode.getNodeName());
+                            if (propertiesNode.getFirstChild() == null) {
+                                values.put(propertiesNode.getNodeName(), "");
+                            } else {
+                                values.put(propertiesNode.getNodeName(), propertiesNode.getFirstChild().getNodeValue());
+
+                            }
+
+                        }
+                        Log.d("Kenteken auto", values.get("d:Kenteken"));
+
+
+                        // leesbaar(doc);
 
 
                     } catch (SAXException e) {
@@ -102,15 +146,18 @@ public class kentekenMain extends Activity {
 
     }
 
-    public static final void leesbaar(Document xml) throws Exception {
-        Transformer tf = TransformerFactory.newInstance().newTransformer();
-        tf.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-        tf.setOutputProperty(OutputKeys.INDENT, "yes");
-        Writer out = new StringWriter();
-        tf.transform(new DOMSource(xml), new StreamResult(out));
-        System.out.println(out.toString());
+    private String getNodeAttributeByTagName(Node parentNode, String tagNameOfAttr) {
+        String nodeValue = "";
 
+        NamedNodeMap questNodeAttr = parentNode.getAttributes();
+
+        if (questNodeAttr.getLength() != 0)
+            nodeValue = questNodeAttr.getNamedItem(tagNameOfAttr).getTextContent();
+
+        return nodeValue;
     }
+
+
 
 
 
