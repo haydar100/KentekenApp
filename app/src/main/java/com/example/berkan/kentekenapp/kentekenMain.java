@@ -8,7 +8,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -34,7 +33,7 @@ import javax.xml.transform.stream.StreamResult;
 
 public class kentekenMain extends Activity {
 
-
+    JSONParser jParser = new JSONParser();
 
 
     public static final void leesbaar(Document xml) throws Exception {
@@ -55,13 +54,18 @@ public class kentekenMain extends Activity {
         return nValue.getNodeValue();
     }
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        new JSONParser().execute();
         setContentView(R.layout.activity_kenteken_main);
-        getCar("57ZHD2");
-        getCar("9THK73");
+        // getCar("57ZHD2");
+        // getCar("9THK73");
 
+        // requestWebService("https://api.datamarket.azure.com/Data.ashx/opendata.rdw/VRTG.Open.Data/v1/KENT_VRTG_O_DAT('57ZHD2')?$format=json")
+
+        //https://api.datamarket.azure.com/Data.ashx/opendata.rdw/VRTG.Open.Data/v1/KENT_VRTG_O_DAT('57ZHD2')?$format=json
     }
 
     @Override
@@ -123,6 +127,8 @@ public class kentekenMain extends Activity {
 
                         }
                         Log.d("Kenteken auto", values.get("d:Kenteken"));
+                        Log.d("Voertuigsoort", values.get("d:Voertuigsoort"));
+                        Auto a = new Auto(values.get("d:Kenteken"), values.get("d:Merk"));
 
 
                         // leesbaar(doc);
@@ -144,24 +150,6 @@ public class kentekenMain extends Activity {
         });
         thread.start();
 
+
     }
-
-    private String getNodeAttributeByTagName(Node parentNode, String tagNameOfAttr) {
-        String nodeValue = "";
-
-        NamedNodeMap questNodeAttr = parentNode.getAttributes();
-
-        if (questNodeAttr.getLength() != 0)
-            nodeValue = questNodeAttr.getNamedItem(tagNameOfAttr).getTextContent();
-
-        return nodeValue;
-    }
-
-
-
-
-
-
-
-
 }
