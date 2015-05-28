@@ -83,12 +83,17 @@ public class JSONParser extends AsyncTask<String, String, String> {
 
     @Override
     protected String doInBackground(String... strings) {
-        JSONObject json = JSONParser.requestWebService("https://api.datamarket.azure.com/Data.ashx/opendata.rdw/VRTG.Open.Data/v1/KENT_VRTG_O_DAT('57ZHD2')?$format=json");
+
+        JSONObject json = null;
         try {
-            String kenteken = json.getString("Kenteken");
+            json = JSONParser.requestWebService("https://api.datamarket.azure.com/Data.ashx/opendata.rdw/VRTG.Open.Data/v1/KENT_VRTG_O_DAT('57ZHD2')?$format=json").getJSONObject("d");
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        String kenteken = json.optString("Kenteken");
+        String merk = json.optString("Merk");
+        String Aantalzitplaatsen = json.optString("Aantalzitplaatsen");
+        String test = "test";
         return null;
     }
 
