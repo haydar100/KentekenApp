@@ -25,6 +25,7 @@ import java.util.Scanner;
 public class JSONParser extends AsyncTask<String, String, Auto> {
 
     public JSONParser() {
+        //
 
     }
 
