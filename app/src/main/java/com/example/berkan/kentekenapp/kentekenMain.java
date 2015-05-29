@@ -1,6 +1,9 @@
 package com.example.berkan.kentekenapp;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.sax.Element;
 import android.util.Log;
@@ -8,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -78,12 +82,19 @@ public class kentekenMain extends Activity {
     public void OK(View v) {
         EditText ingevuldeKenteken = (EditText) findViewById(R.id.vulKenteken);
         EditText editText = (EditText) findViewById(R.id.getMerk);
+        ImageView mImageView = (ImageView) findViewById(R.id.imageView);
+        EditText editText1 = (EditText) findViewById(R.id.merkenType);
+
 
         try {
             System.out.println(String.valueOf(ingevuldeKenteken));
             String xyz = ingevuldeKenteken.getText().toString();
             b = new JSONParser().execute(xyz).get();
+
             editText.setText(b.toString());
+            editText1.setText(b.getMerk());
+            new DownloadImageTask((ImageView) findViewById(R.id.imageView))
+                    .execute(b.getImageUrl());
 
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -152,7 +163,7 @@ public class kentekenMain extends Activity {
                         }
                         Log.d("Kenteken auto", values.get("d:Kenteken"));
                         Log.d("Voertuigsoort", values.get("d:Voertuigsoort"));
-                        Auto a = new Auto(values.get("d:Kenteken"), values.get("d:Merk"));
+                        // Auto a = new Auto(values.get("d:Kenteken"), values.get("d:Merk"));
 
 
                         // leesbaar(doc);
@@ -175,5 +186,31 @@ public class kentekenMain extends Activity {
         thread.start();
 
 
+    }
+
+
+    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        ImageView bmImage;
+
+        public DownloadImageTask(ImageView bmImage) {
+            this.bmImage = bmImage;
+        }
+
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return mIcon11;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            bmImage.setImageBitmap(result);
+        }
     }
 }
