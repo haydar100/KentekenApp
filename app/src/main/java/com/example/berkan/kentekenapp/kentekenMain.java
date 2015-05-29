@@ -39,7 +39,7 @@ import javax.xml.transform.stream.StreamResult;
 
 
 public class kentekenMain extends Activity {
-    Auto b = null;
+    Car carObj = null;
 
 
 
@@ -89,12 +89,12 @@ public class kentekenMain extends Activity {
         try {
             System.out.println(String.valueOf(ingevuldeKenteken));
             String xyz = ingevuldeKenteken.getText().toString();
-            b = new JSONParser().execute(xyz).get();
+            carObj = new JSONParser().execute(xyz).get();
 
-            editText.setText(b.toString());
-            editText1.setText(b.getMerk());
+            editText.setText(carObj.toString());
+            editText1.setText(carObj.getMerk());
             new DownloadImageTask((ImageView) findViewById(R.id.imageView))
-                    .execute(b.getImageUrl());
+                    .execute(carObj.getImageUrl());
 
         } catch (InterruptedException e) {
             e.printStackTrace();

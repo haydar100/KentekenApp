@@ -22,7 +22,7 @@ import java.util.Scanner;
 /**
  * Created by Haydar on 28-05-15.
  */
-public class JSONParser extends AsyncTask<String, String, Auto> {
+public class JSONParser extends AsyncTask<String, String, Car> {
 
     public JSONParser() {
         //
@@ -129,36 +129,36 @@ public class JSONParser extends AsyncTask<String, String, Auto> {
 
 
     @Override
-    protected Auto doInBackground(String... strings) {
+    protected Car doInBackground(String... strings) {
         String kenteken = strings[0];
         //String typeAuto = strings[1];
-        JSONObject json = null;
-        JSONObject json2 = null;
+        JSONObject rdwObj = null;
+        JSONObject flickrJsonObj = null;
         JSONObject json3 = null;
 
         try {
-            json = JSONParser.requestWebService("https://api.datamarket.azure.com/Data.ashx/opendata.rdw/VRTG.Open.Data/v1/KENT_VRTG_O_DAT('" + kenteken + "')?$format=json").getJSONObject("d");
+            rdwObj = JSONParser.requestWebService("https://api.datamarket.azure.com/Data.ashx/opendata.rdw/VRTG.Open.Data/v1/KENT_VRTG_O_DAT('" + kenteken + "')?$format=json").getJSONObject("d");
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        String kentteken1 = json.optString("Kenteken");
-        String merk = json.optString("Merk");
-        String handelsMerk = json.optString("Handelsbenaming");
-
-        String Aantalzitplaatsen = json.optString("Aantalzitplaatsen");
-        String test = "test";
-        json2 = JSONParser.requestImageFromWebservice("http://api.flickr.com/services/feeds/photos_public.gne?nojsoncallback=?&tags=" + merk + "%20" + handelsMerk + "&format=json");
-        //JSONObject objects =  json2.getJSONObject(1);
-        //    String url = objects.getString("media");
         Gson gson = new Gson();
+        Car car = gson.fromJson(rdwObj.toString(), Car.class);
 
-        ImageResult fsr = gson.fromJson(json2.toString(), ImageResult.class);
+        String kentteken1 = car.getKenteken();
+        String merk = car.getMerk();
+        String handelsMerk = car.getHandelsbenaming();
+
+
+        flickrJsonObj = JSONParser.requestImageFromWebservice("http://api.flickr.com/services/feeds/photos_public.gne?nojsoncallback=?&tags=" + merk + "%20" + handelsMerk + "&format=json");
+
+        ImageResult fsr = gson.fromJson(flickrJsonObj.toString(), ImageResult.class);
         String imageUrl = String.valueOf(fsr.getItems().get(0).getMedia());
-        Auto a = new Auto(kentteken1, merk, fsr.getItems().get(0).getMedia().getM());
+        String carSign = car.getKenteken();
+
+        Car carObj = new Car(kentteken1, merk, fsr.getItems().get(0).getMedia().getM());
 
 
-
-        return a;
+        return carObj;
     }
 
 
