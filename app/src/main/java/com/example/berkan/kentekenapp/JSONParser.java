@@ -152,7 +152,7 @@ public class JSONParser extends AsyncTask<String, String, Auto> {
         //    String url = objects.getString("media");
         Gson gson = new Gson();
 
-        Flickrsearchresult fsr = gson.fromJson(json2.toString(), Flickrsearchresult.class);
+        ImageResult fsr = gson.fromJson(json2.toString(), ImageResult.class);
         String imageUrl = String.valueOf(fsr.getItems().get(0).getMedia());
         Auto a = new Auto(kentteken1, merk, fsr.getItems().get(0).getMedia().getM());
 
