@@ -52,7 +52,7 @@ public class kentekenMain extends Activity {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-        alertView(carObj.getMerk() + " " + carObj.getKenteken() + " " + carObj.getAantalcilinders());
+        alertView(carObj.getMerk() + " " + carObj.getKenteken() + "s " + carObj.getAantalcilinders());
 
     }
 
