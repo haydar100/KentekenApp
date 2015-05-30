@@ -1,14 +1,11 @@
 package com.example.berkan.kentekenapp;
 
 import android.os.AsyncTask;
-import android.os.Build;
 
 import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -25,13 +22,10 @@ import java.util.Scanner;
 public class JSONParser extends AsyncTask<String, String, Car> {
 
     public JSONParser() {
-        //
-
     }
 
 
     public static JSONObject requestImageFromWebservice(String serviceUrl) {
-        disableConnectionReuseIfNecessary();
 
         HttpURLConnection urlConnection = null;
         try {
@@ -73,7 +67,6 @@ public class JSONParser extends AsyncTask<String, String, Car> {
     }
 
     public static JSONObject requestWebService(String serviceUrl) {
-        disableConnectionReuseIfNecessary();
 
         HttpURLConnection urlConnection = null;
         try {
@@ -113,17 +106,8 @@ public class JSONParser extends AsyncTask<String, String, Car> {
         return null;
     }
 
-    private static void disableConnectionReuseIfNecessary() {
-        // see HttpURLConnection API doc
-        if (Integer.parseInt(Build.VERSION.SDK)
-                < Build.VERSION_CODES.FROYO) {
-            System.setProperty("http.keepAlive", "false");
-        }
-    }
 
     private static String getResponseText(InputStream inStream) {
-        // very nice trick from
-        // http://weblogs.java.net/blog/pat/archive/2004/10/stupid_scanner_1.html
         return new Scanner(inStream).useDelimiter("\\A").next();
     }
 
@@ -131,7 +115,6 @@ public class JSONParser extends AsyncTask<String, String, Car> {
     @Override
     protected Car doInBackground(String... strings) {
         String kenteken = strings[0];
-        //String typeAuto = strings[1];
         JSONObject rdwObj = null;
         JSONObject flickrJsonObj = null;
         JSONObject json3 = null;
@@ -148,8 +131,9 @@ public class JSONParser extends AsyncTask<String, String, Car> {
         String merk = car.getMerk();
         String handelsMerk = car.getHandelsbenaming();
 
-
-        flickrJsonObj = JSONParser.requestImageFromWebservice("http://api.flickr.com/services/feeds/photos_public.gne?nojsoncallback=?&tags=" + merk + "%20" + handelsMerk + "&format=json");
+        String s = "http://api.flickr.com/services/feeds/photos_public.gne?nojsoncallback=?&tags=" + merk + " " + handelsMerk + "&format=json";
+        s = s.replaceAll(" ", "%20");
+        flickrJsonObj = JSONParser.requestImageFromWebservice(s);
 
         ImageResult fsr = gson.fromJson(flickrJsonObj.toString(), ImageResult.class);
         String imageUrl = String.valueOf(fsr.getItems().get(0).getMedia());
@@ -162,16 +146,6 @@ public class JSONParser extends AsyncTask<String, String, Car> {
     }
 
 
-    private String getNodeAttributeByTagName(Node parentNode, String tagNameOfAttr) {
-        String nodeValue = "";
-
-        NamedNodeMap questNodeAttr = parentNode.getAttributes();
-
-        if (questNodeAttr.getLength() != 0)
-            nodeValue = questNodeAttr.getNamedItem(tagNameOfAttr).getTextContent();
-
-        return nodeValue;
-    }
 
 
 }
