@@ -1,6 +1,7 @@
 package com.example.berkan.kentekenapp;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.google.gson.Gson;
 
@@ -86,7 +87,11 @@ public class JSONParser extends AsyncTask<String, String, Car> {
             // create JSON object from content
             InputStream in = new BufferedInputStream(
                     urlConnection.getInputStream());
-            return new JSONObject(getResponseText(in));
+            if (in != null) {
+                return new JSONObject(getResponseText(in));
+            } else {
+                Log.d("Geen auto", "geen auto");
+            }
 
         } catch (MalformedURLException e) {
             // URL is invalid
@@ -114,13 +119,16 @@ public class JSONParser extends AsyncTask<String, String, Car> {
 
     @Override
     protected Car doInBackground(String... strings) {
+        Car carObj = null;
         String kenteken = strings[0];
         JSONObject rdwObj = null;
         JSONObject flickrJsonObj = null;
         JSONObject json3 = null;
 
         try {
+
             rdwObj = JSONParser.requestWebService("https://api.datamarket.azure.com/Data.ashx/opendata.rdw/VRTG.Open.Data/v1/KENT_VRTG_O_DAT('" + kenteken + "')?$format=json").getJSONObject("d");
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -134,12 +142,17 @@ public class JSONParser extends AsyncTask<String, String, Car> {
         String s = "http://api.flickr.com/services/feeds/photos_public.gne?nojsoncallback=?&tags=" + merk + " " + handelsMerk + "&format=json";
         s = s.replaceAll(" ", "%20");
         flickrJsonObj = JSONParser.requestImageFromWebservice(s);
-
         ImageResult fsr = gson.fromJson(flickrJsonObj.toString(), ImageResult.class);
-        String imageUrl = String.valueOf(fsr.getItems().get(0).getMedia());
-        String carSign = car.getKenteken();
 
-        Car carObj = new Car(kentteken1, merk, fsr.getItems().get(0).getMedia().getM());
+        if (fsr.getItems().size() > 0) {
+
+            carObj = new Car(kentteken1, merk, fsr.getItems().get(0).getMedia().getM());
+
+        } else {
+            carObj = new Car(kentteken1, merk, null);
+
+        }
+
 
 
         return carObj;
