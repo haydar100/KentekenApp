@@ -159,6 +159,4 @@ public class JSONParser extends AsyncTask<String, String, Car> {
     }
 
 
-
-
 }

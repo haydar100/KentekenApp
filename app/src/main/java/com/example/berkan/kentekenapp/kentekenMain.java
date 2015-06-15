@@ -34,10 +34,10 @@ public class kentekenMain extends Activity {
     }
 
     public void OK(View v) {
-        EditText ingevuldeKenteken = (EditText) findViewById(R.id.vulKenteken);
-        EditText editText = (EditText) findViewById(R.id.getMerk);
-        ImageView mImageView = (ImageView) findViewById(R.id.imageView);
-        EditText editText1 = (EditText) findViewById(R.id.merkenType);
+        EditText ingevuldeKenteken = (EditText) findViewById(R.id.editText2);
+        //EditText editText = (EditText) findViewById(R.id.getMerk);
+        //ImageView mImageView = (ImageView) findViewById(R.id.imageView);
+        // EditText editText1 = (EditText) findViewById(R.id.merkenType);
 
 
         try {
@@ -54,12 +54,12 @@ public class kentekenMain extends Activity {
 
 
             if (carObj != null) {
-                editText.setText(carObj.toString());
-                editText1.setText(carObj.getMerk());
+                // editText.setText(carObj.toString());
+                //  editText1.setText(carObj.getMerk());
                 alertView(carObj.getMerk() + " " + carObj.getKenteken() + "s " + carObj.getAantalcilinders());
                 if (carObj.getImageUrl() != null) {
-                    new DownloadImageTask((ImageView) findViewById(R.id.imageView))
-                            .execute(carObj.getImageUrl());
+                    //   new DownloadImageTask((ImageView) findViewById(R.id.imageView))
+                    //     .execute(carObj.getImageUrl());
                 } else {
                     carObj.setImageUrl("");
                 }
