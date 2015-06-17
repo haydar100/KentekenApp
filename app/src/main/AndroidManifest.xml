@@ -20,7 +20,10 @@
         </activity>
         <activity
             android:name=".CarDetailActivity"
-            android:label="@string/title_activity_car_detail"></activity>
+            android:label="@string/title_activity_car_detail"
+            android:parentActivityName="com.example.berkan.kentekenapp.kentekenMain">
+
+        </activity>
     </application>
 
 </manifest>
