@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,6 +16,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
+import java.util.Date;
 import java.util.Scanner;
 
 /**
@@ -132,7 +134,11 @@ public class JSONParser extends AsyncTask<String, String, Car> {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Gson gson = new Gson();
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.registerTypeAdapter(Date.class, new DateDeserializer());
+        Gson gson = gsonBuilder.create();
+
+
         Car car = gson.fromJson(rdwObj.toString(), Car.class);
 
         String kentteken1 = car.getKenteken();
@@ -146,10 +152,11 @@ public class JSONParser extends AsyncTask<String, String, Car> {
 
         if (fsr.getItems().size() > 0) {
 
-            carObj = new Car(kentteken1, merk, fsr.getItems().get(0).getMedia().getM());
+            carObj = car;
+            car.setImageUrl(fsr.getItems().get(0).getMedia().getM());
 
         } else {
-            carObj = new Car(kentteken1, merk, null);
+            carObj = car;
 
         }
 

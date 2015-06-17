@@ -3,6 +3,7 @@ package com.example.berkan.kentekenapp;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -56,6 +57,10 @@ public class kentekenMain extends Activity {
             if (carObj != null) {
                 // editText.setText(carObj.toString());
                 //  editText1.setText(carObj.getMerk());
+                Intent intent = new Intent(this, CarDetailActivity.class);
+                intent.putExtra("carObject", carObj);
+
+                startActivity(intent);
                 alertView(carObj.getMerk() + " " + carObj.getKenteken() + "s " + carObj.getAantalcilinders());
                 if (carObj.getImageUrl() != null) {
                     //   new DownloadImageTask((ImageView) findViewById(R.id.imageView))
