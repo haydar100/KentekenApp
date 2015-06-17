@@ -6,7 +6,6 @@ import java.io.Serializable;
  * Created by Haydar on 29-05-15.
  */
 public class Car implements Serializable {
-    private static final long serialVersionUID = 1L;
 
 
     private String Eerstekleur;

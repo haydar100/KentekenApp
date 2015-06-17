@@ -1,9 +1,11 @@
 package com.example.berkan.kentekenapp;
 
+import java.io.Serializable;
+
 /**
  * Created by Haydar on 29-05-15.
  */
-public class CarMeta {
+public class CarMeta implements Serializable {
 
     private String id;
 

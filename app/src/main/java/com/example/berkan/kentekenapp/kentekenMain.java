@@ -4,19 +4,14 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
 
-import java.io.InputStream;
 import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
 
@@ -61,13 +56,8 @@ public class kentekenMain extends Activity {
                 intent.putExtra("carObject", carObj);
 
                 startActivity(intent);
-                alertView(carObj.getMerk() + " " + carObj.getKenteken() + "s " + carObj.getAantalcilinders());
-                if (carObj.getImageUrl() != null) {
-                    //   new DownloadImageTask((ImageView) findViewById(R.id.imageView))
-                    //     .execute(carObj.getImageUrl());
-                } else {
-                    carObj.setImageUrl("");
-                }
+                //   alertView(carObj.getMerk() + " " + carObj.getKenteken() + "s " + carObj.getAantalcilinders());
+
             } else {
                 Log.d("Car object is empty", "Car is empty");
             }
@@ -152,33 +142,7 @@ public class kentekenMain extends Activity {
         return -1;
     }
 
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        ImageView bmImage;
 
-        public DownloadImageTask(ImageView bmImage) {
-            this.bmImage = bmImage;
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-            return mIcon11;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            if (bmImage != null) {
-                bmImage.setImageBitmap(result);
-            }
-        }
-
-    }
 
 
 }
