@@ -5,6 +5,10 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -12,6 +16,7 @@ import org.json.JSONObject;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
@@ -128,20 +133,19 @@ public class JSONParser extends AsyncTask<String, String, Car> {
         JSONObject json3 = null;
 
         try {
-
             rdwObj = JSONParser.requestWebService("https://api.datamarket.azure.com/Data.ashx/opendata.rdw/VRTG.Open.Data/v1/KENT_VRTG_O_DAT('" + kenteken + "')?$format=json").getJSONObject("d");
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.registerTypeAdapter(Date.class, new DateDeserializer());
-        Gson gson = gsonBuilder.create();
 
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        //DotNetDeserializer ds = new DotNetDeserializer();
+        // gsonBuilder.registerTypeAdapter(Car.class, ds);
+        Gson gson = gsonBuilder.create();
 
         Car car = gson.fromJson(rdwObj.toString(), Car.class);
 
-        String kentteken1 = car.getKenteken();
+
         String merk = car.getMerk();
         String handelsMerk = car.getHandelsbenaming();
 
@@ -163,6 +167,19 @@ public class JSONParser extends AsyncTask<String, String, Car> {
 
 
         return carObj;
+    }
+
+
+    public static class DotNetDeserializer implements JsonDeserializer {
+        public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+            if (json.isJsonNull())
+                return null;
+
+            String s = json.getAsJsonPrimitive().getAsString();
+            long l = Long.parseLong(s.substring(6, s.length() - 2));
+            Date d = new Date(l);
+            return d;
+        }
     }
 
 
