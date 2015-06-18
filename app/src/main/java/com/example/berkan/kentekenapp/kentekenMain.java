@@ -1,8 +1,6 @@
 package com.example.berkan.kentekenapp;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,26 +15,24 @@ import java.util.regex.Pattern;
 
 
 public class kentekenMain extends Activity {
+
     public Pattern[] arrSC = new Pattern[14];
     Car carObj = null;
+    private EditText ingevuldeKenteken;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_kenteken_main);
+        ingevuldeKenteken = (EditText) findViewById(R.id.editText2);
 
-        // requestWebService("https://api.datamarket.azure.com/Data.ashx/opendata.rdw/VRTG.Open.Data/v1/KENT_VRTG_O_DAT('')?$format=json")
-        //https://api.datamarket.azure.com/Data.ashx/opendata.rdw/VRTG.Open.Data/v1/KENT_VRTG_O_DAT('57ZHD2')?$format=json
     }
 
     public void OK(View v) {
-        EditText ingevuldeKenteken = (EditText) findViewById(R.id.editText2);
-        //EditText editText = (EditText) findViewById(R.id.getMerk);
-        //ImageView mImageView = (ImageView) findViewById(R.id.imageView);
-        // EditText editText1 = (EditText) findViewById(R.id.merkenType);
-
 
         try {
+
             System.out.println(String.valueOf(ingevuldeKenteken));
             String xyz = ingevuldeKenteken.getText().toString();
 
@@ -50,13 +46,10 @@ public class kentekenMain extends Activity {
 
 
             if (carObj != null) {
-                // editText.setText(carObj.toString());
-                //  editText1.setText(carObj.getMerk());
                 Intent intent = new Intent(this, CarDetailActivity.class);
                 intent.putExtra("carObject", carObj);
 
                 startActivity(intent);
-                //   alertView(carObj.getMerk() + " " + carObj.getKenteken() + "s " + carObj.getAantalcilinders());
 
             } else {
                 Log.d("Car object is empty", "Car is empty");
@@ -71,22 +64,7 @@ public class kentekenMain extends Activity {
 
     }
 
-    private void alertView(String message) {
-        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
-        dialog.setTitle("Hello")
-                .setIcon(R.mipmap.ic_launcher)
-
-                .setMessage(message)
-//  .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-//      public void onClick(DialogInterface dialoginterface, int i) {
-//          dialoginterface.cancel();
-//          }})
-                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialoginterface, int i) {
-                    }
-                }).show();
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -141,8 +119,5 @@ public class kentekenMain extends Activity {
         }
         return -1;
     }
-
-
-
 
 }

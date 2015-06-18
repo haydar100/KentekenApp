@@ -69,10 +69,10 @@ public class CarDetailActivity extends Activity {
         kleurContent.setText(carObj.getEerstekleur());
         cilinderContent.setText(carObj.getAantalcilinders());
         zitplaatsenContent.setText(carObj.getAantalzitplaatsen());
-        vermogenContent.setText(carObj.getVermogen());
-        massaContent.setText(carObj.getMassaleegvoertuig());
-        maxMassaContent.setText(carObj.getMassarijklaar());
-        bpmContent.setText(carObj.getBPM());
+        vermogenContent.setText(carObj.getVermogen() + " kW");
+        massaContent.setText(carObj.getMassaleegvoertuig() + " kg");
+        maxMassaContent.setText(carObj.getMassarijklaar() + " kg");
+        bpmContent.setText("€ " + carObj.getBPM());
         gestolenContent.setText("Niet beschikbaar");
 
     }

@@ -7,12 +7,17 @@ import com.google.gson.JsonParseException;
 
 import java.lang.reflect.Type;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class DateDeserializer implements JsonDeserializer<Date> {
-    public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-        String s = json.getAsJsonPrimitive().getAsString();
-        long l = Long.parseLong(s.substring(6, s.length() - 2));
-        Date d = new Date(l);
-        return d;
+    public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+            throws JsonParseException {
+        String JSONDateToMilliseconds = "\\/(Date\\((.*?)(\\+.*)?\\))\\/";
+        Pattern pattern = Pattern.compile(JSONDateToMilliseconds);
+        Matcher matcher = pattern.matcher(json.getAsJsonPrimitive().getAsString());
+        String result = matcher.replaceAll("$2");
+
+        return new Date(new Long(result));
     }
 }

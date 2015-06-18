@@ -5,13 +5,6 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonPrimitive;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,7 +12,6 @@ import org.json.JSONObject;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
@@ -142,10 +134,9 @@ public class JSONParser extends AsyncTask<String, String, Car> {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-        Gson gson = new  GsonBuilder().registerTypeAdapter(Date.class ,new DateDeserializer()).create();
-
-
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.registerTypeAdapter(Date.class, new DateDeserializer());
+        Gson gson = gsonBuilder.create();
 
 
         Car car = gson.fromJson(rdwObj.toString(), Car.class);
@@ -173,25 +164,6 @@ public class JSONParser extends AsyncTask<String, String, Car> {
 
         return carObj;
     }
-
-
-    JsonSerializer<Date> ser = new JsonSerializer<Date>() {
-        @Override
-        public JsonElement serialize(Date src, Type typeOfSrc, JsonSerializationContext
-                context) {
-            return src == null ? null : new JsonPrimitive(src.getTime());
-        }
-    };
-
-    JsonDeserializer<Date> deser = new JsonDeserializer<Date>() {
-        @Override
-        public Date deserialize(JsonElement json, Type typeOfT,
-                                JsonDeserializationContext context) throws JsonParseException {
-            return json == null ? null : new Date(json.getAsLong());
-        }
-    };
-
-
 
 
 }
