@@ -1,6 +1,7 @@
 package com.example.berkan.kentekenapp;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Created by Haydar on 29-05-15.
@@ -44,7 +45,7 @@ public class Car implements Serializable {
 
     private String Massaleegvoertuig;
 
-    private String DatumeersteafgifteNederland;
+    private Date DatumeersteafgifteNederland;
 
     private String Kenteken;
 
@@ -54,7 +55,7 @@ public class Car implements Serializable {
 
     private String Maximumtetrekkenmassaopleggergeremd;
 
-    private String VervaldatumAPK;
+    private Date VervaldatumAPK;
 
     private String Maximumtetrekkenmassageremd;
 
@@ -72,7 +73,7 @@ public class Car implements Serializable {
 
     private String Aantalzitplaatsen;
 
-    private String Datumeerstetoelating;
+    private Date Datumeerstetoelating;
 
     private String Maximumtetrekkenmassaongeremd;
 
@@ -84,7 +85,7 @@ public class Car implements Serializable {
 
     private String BPM;
 
-    private String Datumaanvangtenaamstelling;
+    private Date Datumaanvangtenaamstelling;
 
     private String G3installatie;
 
@@ -253,11 +254,11 @@ public class Car implements Serializable {
         this.Massaleegvoertuig = Massaleegvoertuig;
     }
 
-    public String getDatumeersteafgifteNederland() {
+    public Date getDatumeersteafgifteNederland() {
         return DatumeersteafgifteNederland;
     }
 
-    public void setDatumeersteafgifteNederland(String DatumeersteafgifteNederland) {
+    public void setDatumeersteafgifteNederland(Date DatumeersteafgifteNederland) {
         this.DatumeersteafgifteNederland = DatumeersteafgifteNederland;
     }
 
@@ -293,11 +294,11 @@ public class Car implements Serializable {
         this.Maximumtetrekkenmassaopleggergeremd = Maximumtetrekkenmassaopleggergeremd;
     }
 
-    public String getVervaldatumAPK() {
+    public Date getVervaldatumAPK() {
         return VervaldatumAPK;
     }
 
-    public void setVervaldatumAPK(String VervaldatumAPK) {
+    public void setVervaldatumAPK(Date VervaldatumAPK) {
         this.VervaldatumAPK = VervaldatumAPK;
     }
 
@@ -365,11 +366,11 @@ public class Car implements Serializable {
         this.Aantalzitplaatsen = Aantalzitplaatsen;
     }
 
-    public String getDatumeerstetoelating() {
+    public Date getDatumeerstetoelating() {
         return Datumeerstetoelating;
     }
 
-    public void setDatumeerstetoelating(String Datumeerstetoelating) {
+    public void setDatumeerstetoelating(Date Datumeerstetoelating) {
         this.Datumeerstetoelating = Datumeerstetoelating;
     }
 
@@ -413,11 +414,11 @@ public class Car implements Serializable {
         this.BPM = BPM;
     }
 
-    public String getDatumaanvangtenaamstelling() {
+    public Date getDatumaanvangtenaamstelling() {
         return Datumaanvangtenaamstelling;
     }
 
-    public void setDatumaanvangtenaamstelling(String Datumaanvangtenaamstelling) {
+    public void setDatumaanvangtenaamstelling(Date Datumaanvangtenaamstelling) {
         this.Datumaanvangtenaamstelling = Datumaanvangtenaamstelling;
     }
 
