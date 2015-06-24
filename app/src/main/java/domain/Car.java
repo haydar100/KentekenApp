@@ -1,4 +1,4 @@
-package com.example.berkan.kentekenapp;
+package domain;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -7,6 +7,7 @@ import java.util.Date;
  * Created by Haydar on 29-05-15.
  */
 public class Car implements Serializable {
+    private long id;
 
 
     private String Eerstekleur;
@@ -99,6 +100,10 @@ public class Car implements Serializable {
         this.Kenteken = Kenteken;
         this.Merk = Merk;
         this.imageUrl = imageUrl;
+
+    }
+
+    public Car() {
 
     }
 
@@ -444,6 +449,14 @@ public class Car implements Serializable {
 
     public void set__metadata(CarMeta __metadata) {
         this.__metadata = __metadata;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     @Override

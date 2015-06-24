@@ -1,4 +1,4 @@
-package com.example.berkan.kentekenapp;
+package domain;
 
 import java.io.Serializable;
 

@@ -1,4 +1,4 @@
-package com.example.berkan.kentekenapp;
+package domain;
 
 /**
  * Created by Haydar on 29-05-15.

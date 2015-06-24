@@ -1,4 +1,4 @@
-package com.example.berkan.kentekenapp;
+package json;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -18,6 +18,10 @@ import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.util.Date;
 import java.util.Scanner;
+
+import domain.Car;
+import domain.ImageResult;
+import util.DateDeserializer;
 
 /**
  * Created by Haydar on 28-05-15.
@@ -125,10 +129,9 @@ public class JSONParser extends AsyncTask<String, String, Car> {
         String kenteken = strings[0];
         JSONObject rdwObj = null;
         JSONObject flickrJsonObj = null;
-        JSONObject json3 = null;
 
         try {
-
+            // Gegevens in object stoppen die bij het kenteken horen, via de opendata van RDW
             rdwObj = JSONParser.requestWebService("https://api.datamarket.azure.com/Data.ashx/opendata.rdw/VRTG.Open.Data/v1/KENT_VRTG_O_DAT('" + kenteken + "')?$format=json").getJSONObject("d");
 
         } catch (JSONException e) {
@@ -141,9 +144,10 @@ public class JSONParser extends AsyncTask<String, String, Car> {
 
         Car car = gson.fromJson(rdwObj.toString(), Car.class);
 
-        String kentteken1 = car.getKenteken();
         String merk = car.getMerk();
         String handelsMerk = car.getHandelsbenaming();
+
+        // Proberen een plaatje op te halen die past bij het kenteken, als er geen plaatje wordt gevonden dan een generiek plaatje van een auto
 
         String s = "http://api.flickr.com/services/feeds/photos_public.gne?nojsoncallback=?&tags=" + merk + " " + handelsMerk + "&format=json";
         s = s.replaceAll(" ", "%20");
@@ -151,7 +155,7 @@ public class JSONParser extends AsyncTask<String, String, Car> {
         ImageResult fsr = gson.fromJson(flickrJsonObj.toString(), ImageResult.class);
 
         if (fsr.getItems().size() > 0) {
-
+            // kijken of er een resultaat is , deze vervolgens setten in het carObject
             carObj = car;
             car.setImageUrl(fsr.getItems().get(0).getMedia().getM());
 
@@ -161,7 +165,7 @@ public class JSONParser extends AsyncTask<String, String, Car> {
         }
 
 
-
+        // Car object uiteindelijk returnen
         return carObj;
     }
 

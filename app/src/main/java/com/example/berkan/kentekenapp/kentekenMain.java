@@ -13,11 +13,16 @@ import android.widget.Toast;
 import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
 
+import domain.Car;
+import json.JSONParser;
+import util.KentekenDataSource;
+
 
 public class kentekenMain extends Activity {
 
     public Pattern[] arrSC = new Pattern[14];
     Car carObj = null;
+    private KentekenDataSource datasource;
     private EditText ingevuldeKenteken;
 
 
@@ -26,7 +31,14 @@ public class kentekenMain extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_kenteken_main);
         ingevuldeKenteken = (EditText) findViewById(R.id.editText2);
+        datasource = new KentekenDataSource(this);
+        datasource.open();
 
+    }
+
+    public void history(View v) {
+        Intent intent = new Intent(this, ListKentekensActivity.class);
+        startActivity(intent);
     }
 
     public void OK(View v) {
@@ -34,14 +46,16 @@ public class kentekenMain extends Activity {
         try {
 
             System.out.println(String.valueOf(ingevuldeKenteken));
-            String xyz = ingevuldeKenteken.getText().toString();
+            String kentekenInput = ingevuldeKenteken.getText().toString();
+            String kentekenRegex = kentekenInput.replaceAll("[\\-\\+\\.\\^:,]", ""); // in het geval dat een gebruiker xx-xx-xx gebruikt of wat dan ook, dan wordt dat gereplaced
+            System.out.print(kentekenRegex.toString());
 
-            if (checkKenteken(xyz) != -1) {
-                carObj = new JSONParser().execute(xyz).get();
+            if (checkKenteken(kentekenRegex) != -1) {
+                // Als kenteken klopt, dan pas mag de JSONParser het proberen
+                carObj = new JSONParser().execute(kentekenRegex).get();
 
             } else {
                 Toast.makeText(this, "Geen geldig kenteken", Toast.LENGTH_LONG).show();
-
             }
 
 
@@ -49,7 +63,9 @@ public class kentekenMain extends Activity {
                 Intent intent = new Intent(this, CarDetailActivity.class);
                 intent.putExtra("carObject", carObj);
 
+
                 startActivity(intent);
+                datasource.createCar(carObj);
 
             } else {
                 Log.d("Car object is empty", "Car is empty");
@@ -88,9 +104,11 @@ public class kentekenMain extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    public int checkKenteken(String licenseplate) {
-        licenseplate = licenseplate.replace("-", "").toUpperCase();
 
+    public int checkKenteken(String kenteken) {
+        kenteken = kenteken.replace("-", "").toUpperCase();
+
+        // Verschillende patronen van de kentekens
 
         arrSC[0] = Pattern.compile("^[a-zA-Z]{2}[\\d]{2}[\\d]{2}$"); // 1 XX-99-99
         arrSC[1] = Pattern.compile("^[\\d]{2}[\\d]{2}[a-zA-Z]{2}$"); // 2 99-99-XX
@@ -110,11 +128,11 @@ public class kentekenMain extends Activity {
         Pattern scUitz = Pattern.compile("^CD[ABFJNST][0-9]{1,3}$"); //for example: CDB1 of CDJ45
 
         for (int i = 0; i < arrSC.length; i++) {
-            if (arrSC[i].matcher(licenseplate).matches()) {
+            if (arrSC[i].matcher(kenteken).matches()) {
                 return i + 1;
             }
         }
-        if (scUitz.matcher(licenseplate).matches()) {
+        if (scUitz.matcher(kenteken).matches()) {
             return 0;
         }
         return -1;

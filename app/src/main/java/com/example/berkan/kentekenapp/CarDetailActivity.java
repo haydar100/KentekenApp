@@ -14,6 +14,8 @@ import android.widget.TextView;
 
 import java.io.InputStream;
 
+import domain.Car;
+
 
 public class CarDetailActivity extends Activity {
     Car carObj = null;

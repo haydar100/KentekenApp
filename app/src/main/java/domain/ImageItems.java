@@ -1,11 +1,10 @@
-package com.example.berkan.kentekenapp;
+package domain;
 
 /**
  * Created by Haydar on 29-05-15.
  */
 public class ImageItems {
     Media media;
-    // lol
 
     public Media getMedia() {
         return media;
@@ -15,7 +14,4 @@ public class ImageItems {
         this.media = media;
     }
 
-    public void test() {
-
-    }
 }

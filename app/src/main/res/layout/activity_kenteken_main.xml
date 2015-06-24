@@ -44,6 +44,14 @@
             android:text="Vul hier je kenteken in !"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textSize="30dp" />
+
+        <Button
+            android:id="@+id/history"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|bottom"
+            android:onClick="history"
+            android:text="checkHistory" />
     </FrameLayout>
 
 </RelativeLayout>

@@ -1,4 +1,4 @@
-package com.example.berkan.kentekenapp;
+package util;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -11,6 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class DateDeserializer implements JsonDeserializer<Date> {
+    // Date datatype, deserializen zodat we een formaat terugkrijgen waarmee we wat kunnen, anders /(Date 23332323)/
     public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException {
         String JSONDateToMilliseconds = "\\/(Date\\((.*?)(\\+.*)?\\))\\/";
