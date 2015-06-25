@@ -4,7 +4,10 @@ import android.app.ListActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import java.util.List;
 
@@ -13,8 +16,8 @@ import util.KentekenDataSource;
 
 
 public class ListKentekensActivity extends ListActivity {
+    ListView listView;
     private KentekenDataSource datasource;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,12 +26,29 @@ public class ListKentekensActivity extends ListActivity {
         datasource = new KentekenDataSource(this);
         datasource.open();
 
-        List<Car> carList = datasource.getAllCars();
+        final List<Car> carList = datasource.getAllCars();
 
         ArrayAdapter<Car> adapter = new ArrayAdapter<Car>(this,
                 android.R.layout.simple_list_item_1, carList);
 
         setListAdapter(adapter);
+
+
+        listView = getListView();
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+
+                for (int i = 0; i < carList.size(); i++) {
+                    if (carList.get(position) != null) {
+                        String cnt = carList.get(position).getKenteken();
+                        System.out.print(cnt.toString());
+                    }
+                }
+            }
+        });
     }
 
 
@@ -55,6 +75,7 @@ public class ListKentekensActivity extends ListActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
 
     @Override
     protected void onResume() {
