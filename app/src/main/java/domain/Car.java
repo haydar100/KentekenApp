@@ -461,10 +461,7 @@ public class Car implements Serializable {
 
     @Override
     public String toString() {
-        return "Car{" +
-                "Kenteken='" + Kenteken + '\'' +
-                ", Merk='" + Merk + '\'' +
-                '}';
+        return "Kenteken: " + getKenteken() + "\nMerk: " + getMerk();
     }
 
 

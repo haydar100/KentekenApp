@@ -31,7 +31,7 @@ public class ListKentekensActivity extends ListActivity {
 
         final List<Car> carList = datasource.getAllCars();
 
-        ArrayAdapter<Car> adapter = new ArrayAdapter<Car>(this,
+        final ArrayAdapter<Car> adapter = new ArrayAdapter<Car>(this,
                 android.R.layout.simple_list_item_1, carList);
 
         setListAdapter(adapter);
@@ -64,6 +64,22 @@ public class ListKentekensActivity extends ListActivity {
                 startActivity(intent);
 
             }
+        });
+
+
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view,
+                                           int position, long arg3) {
+                Car selectedItem = carList.get(position);
+                carList.remove(selectedItem);
+                adapter.notifyDataSetChanged();
+
+
+                return true;
+            }
+
         });
     }
 
