@@ -1,6 +1,7 @@
 package com.example.berkan.kentekenapp;
 
 import android.app.ListActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -10,8 +11,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import domain.Car;
+import json.JSONParser;
 import util.KentekenDataSource;
 
 
@@ -39,14 +42,27 @@ public class ListKentekensActivity extends ListActivity {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                Car car = null;
 
                 for (int i = 0; i < carList.size(); i++) {
                     if (carList.get(position) != null) {
-                        String cnt = carList.get(position).getKenteken();
-                        System.out.print(cnt.toString());
+                        String kenteken = carList.get(position).getKenteken();
+                        try {
+                            car = new JSONParser().execute(kenteken).get();
+
+
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        } catch (ExecutionException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
+
+                Intent intent = new Intent(ListKentekensActivity.this, CarDetailActivity.class);
+                intent.putExtra("carObject", car);
+                startActivity(intent);
+
             }
         });
     }
