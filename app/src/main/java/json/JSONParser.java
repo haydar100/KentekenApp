@@ -1,5 +1,7 @@
 package json;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -28,9 +30,16 @@ import util.DateDeserializer;
  */
 public class JSONParser extends AsyncTask<String, String, Car> {
 
+    ProgressDialog progress;
+    Activity mActivity;
+
+
     public JSONParser() {
     }
 
+    public JSONParser(Activity mActivity) {
+        this.mActivity = mActivity;
+    }
 
     public static JSONObject requestImageFromWebservice(String serviceUrl) {
 
@@ -132,6 +141,7 @@ public class JSONParser extends AsyncTask<String, String, Car> {
 
         try {
             // Gegevens in object stoppen die bij het kenteken horen, via de opendata van RDW
+
             rdwObj = JSONParser.requestWebService("https://api.datamarket.azure.com/Data.ashx/opendata.rdw/VRTG.Open.Data/v1/KENT_VRTG_O_DAT('" + kenteken + "')?$format=json").getJSONObject("d");
 
         } catch (JSONException e) {

@@ -24,7 +24,8 @@
             android:parentActivityName=".kentekenMain"></activity>
         <activity
             android:name=".ListKentekensActivity"
-            android:label="@string/title_activity_list_kentekens"></activity>
+            android:label="@string/title_activity_list_kentekens"
+            android:parentActivityName=".kentekenMain"></activity>
     </application>
 
 </manifest>

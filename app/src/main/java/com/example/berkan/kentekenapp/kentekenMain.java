@@ -52,7 +52,7 @@ public class kentekenMain extends Activity {
 
             if (checkKenteken(kentekenRegex) != -1) {
                 // Als kenteken klopt, dan pas mag de JSONParser het proberen
-                carObj = new JSONParser().execute(kentekenRegex).get();
+                carObj = new JSONParser(this).execute(kentekenRegex).get();
 
             } else {
                 Toast.makeText(this, "Geen geldig kenteken", Toast.LENGTH_LONG).show();
