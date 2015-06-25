@@ -16,10 +16,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     public static final String COLUMN_ID = "cars_id";
     public static final String COLUMN_KENTEKEN = "kenteken";
     // Database creation sql statement
-    private static final String DATABASE_CREATE = "create table "
-            + TABLE_CARS + "( " + COLUMN_ID
-            + " integer primary key autoincrement, " + COLUMN_KENTEKEN
-            + " text not null);";
+
     public static final String COLUMN_VOERTUIGSOORT = "voertuigsoort";
     public static final String COLUMN_MERK = "merk";
     public static final String COLUMN_TYPE = "type";
@@ -33,8 +30,13 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     public static final String COLUMN_MAXMASSA = "maxmassa";
     public static final String COLUMN_BPM = "bpm";
     public static final String COLUMN_GESTOLEN = "gestolen";
-    private static final String DATABASE_NAME = "commments.db";
+    private static final String DATABASE_NAME = "cars.db";
     private static final int DATABASE_VERSION = 1;
+
+    private static final String DATABASE_CREATE = "create table "
+            + TABLE_CARS + "( " + COLUMN_ID
+            + " integer primary key autoincrement, " + COLUMN_KENTEKEN
+            + " text not null, " + COLUMN_MERK + " text not null);";
 
     public MySQLiteHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

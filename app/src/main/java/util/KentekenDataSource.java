@@ -19,7 +19,7 @@ public class KentekenDataSource {
     private SQLiteDatabase database;
     private MySQLiteHelper dbHelper;
     private String[] allColumns = {MySQLiteHelper.COLUMN_ID,
-            MySQLiteHelper.COLUMN_KENTEKEN};
+            MySQLiteHelper.COLUMN_KENTEKEN, MySQLiteHelper.COLUMN_MERK};
 
 
     public KentekenDataSource(Context context) {
@@ -35,16 +35,20 @@ public class KentekenDataSource {
     }
 
     public Car createCar(Car car) {
+        Car newCar = null;
         ContentValues values = new ContentValues();
         values.put(MySQLiteHelper.COLUMN_KENTEKEN, car.getKenteken());
+        values.put(MySQLiteHelper.COLUMN_MERK, car.getMerk());
         long insertId = database.insert(MySQLiteHelper.TABLE_CARS, null,
                 values);
         Cursor cursor = database.query(MySQLiteHelper.TABLE_CARS,
                 allColumns, MySQLiteHelper.COLUMN_ID + " = " + insertId, null,
                 null, null, null);
-        cursor.moveToFirst();
-        Car newCar = cursorToCar(cursor);
-        cursor.close();
+        if (cursor != null && cursor.moveToFirst()) {
+            newCar = cursorToCar(cursor);
+            cursor.close();
+        }
+
         return newCar;
     }
 
@@ -77,6 +81,7 @@ public class KentekenDataSource {
         Car c = new Car();
         c.setId(cursor.getLong(0));
         c.setKenteken(cursor.getString(1));
+        c.setMerk(cursor.getString(2));
         return c;
     }
 
