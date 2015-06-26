@@ -5,8 +5,10 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.berkan.kentekenapp.CarDetailActivity;
+import com.example.berkan.kentekenapp.R;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -139,7 +141,7 @@ public class JSONParser extends AsyncTask<String, String, Car> {
     protected void onPreExecute() {
         super.onPreExecute();
         progress = new ProgressDialog(mActivity);
-        progress.setMessage("Gegevens ophalen...");
+        progress.setMessage(mActivity.getText(R.string.gegevens_ophalen));
         progress.show();
     }
 
@@ -155,33 +157,40 @@ public class JSONParser extends AsyncTask<String, String, Car> {
 
             rdwObj = JSONParser.requestWebService("https://api.datamarket.azure.com/Data.ashx/opendata.rdw/VRTG.Open.Data/v1/KENT_VRTG_O_DAT('" + kenteken + "')?$format=json").getJSONObject("d");
 
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.registerTypeAdapter(Date.class, new DateDeserializer());
-        Gson gson = gsonBuilder.create();
+
+            GsonBuilder gsonBuilder = new GsonBuilder();
+            gsonBuilder.registerTypeAdapter(Date.class, new DateDeserializer());
+            Gson gson = gsonBuilder.create();
 
 
-        Car car = gson.fromJson(rdwObj.toString(), Car.class);
+            Car car = gson.fromJson(rdwObj.toString(), Car.class);
 
-        String merk = car.getMerk();
-        String handelsMerk = car.getHandelsbenaming();
+            String merk = car.getMerk();
+            String handelsMerk = car.getHandelsbenaming();
 
-        // Proberen een plaatje op te halen die past bij het kenteken, als er geen plaatje wordt gevonden dan een generiek plaatje van een auto
+            // Proberen een plaatje op te halen die past bij het kenteken, als er geen plaatje wordt gevonden dan een generiek plaatje van een auto
 
-        String s = "http://api.flickr.com/services/feeds/photos_public.gne?nojsoncallback=?&tags=" + merk + " " + handelsMerk + "&format=json";
-        s = s.replaceAll(" ", "%20");
-        flickrJsonObj = JSONParser.requestImageFromWebservice(s);
-        ImageResult fsr = gson.fromJson(flickrJsonObj.toString(), ImageResult.class);
+            String s = "http://api.flickr.com/services/feeds/photos_public.gne?nojsoncallback=?&tags=" + merk + " " + handelsMerk + "&format=json";
+            s = s.replaceAll(" ", "%20");
+            flickrJsonObj = JSONParser.requestImageFromWebservice(s);
+            ImageResult fsr = gson.fromJson(flickrJsonObj.toString(), ImageResult.class);
 
-        if (fsr.getItems().size() > 0) {
-            // kijken of er een resultaat is , deze vervolgens setten in het carObject
-            carObj = car;
-            car.setImageUrl(fsr.getItems().get(0).getMedia().getM());
+            if (fsr.getItems().size() > 0) {
+                // kijken of er een resultaat is , deze vervolgens setten in het carObject
+                carObj = car;
+                car.setImageUrl(fsr.getItems().get(0).getMedia().getM());
 
-        } else {
-            carObj = car;
+            } else {
+                carObj = car;
+
+            }
+        } catch (Exception e) {
+            mActivity.runOnUiThread(new Runnable() {
+                public void run() {
+
+                    Toast.makeText(mActivity, mActivity.getText(R.string.gegevens_niet_beschikbaar), Toast.LENGTH_SHORT).show();
+                }
+            });
 
         }
 

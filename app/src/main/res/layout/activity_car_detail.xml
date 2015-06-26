@@ -96,7 +96,6 @@
             android:layout_below="@+id/merkHeader"
             android:ellipsize="end"
             android:maxLines="2"
-            android:scrollHorizontally="true"
             android:text="Type:"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
@@ -107,8 +106,7 @@
             android:layout_alignStart="@+id/merkContent"
             android:layout_below="@+id/merkContent"
             android:ellipsize="end"
-            android:maxLines="2"
-            android:scrollHorizontally="true"
+            android:maxLines="1"
             android:text="Small Text"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 

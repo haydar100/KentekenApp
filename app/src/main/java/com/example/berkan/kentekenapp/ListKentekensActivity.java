@@ -44,15 +44,14 @@ public class ListKentekensActivity extends ListActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Car car = null;
+                String kenteken = null;
 
-                for (int i = 0; i < carList.size(); i++) {
-                    if (carList.get(position) != null) {
-                        
-                        String kenteken = carList.get(position).getKenteken();
-                        new JSONParser(ListKentekensActivity.this, datasource).execute(kenteken);
 
-                    }
-                }
+                kenteken = carList.get(position).getKenteken();
+
+
+                new JSONParser(ListKentekensActivity.this, datasource).execute(kenteken);
+
 
 
             }

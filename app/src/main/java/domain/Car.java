@@ -228,7 +228,12 @@ public class Car implements Serializable {
     }
 
     public String getVermogen() {
-        return Vermogen;
+        if (Vermogen != null) {
+            return Vermogen + " kW";
+        } else {
+            return "";
+        }
+
     }
 
     public void setVermogen(String Vermogen) {
@@ -252,7 +257,11 @@ public class Car implements Serializable {
     }
 
     public String getMassaleegvoertuig() {
-        return Massaleegvoertuig;
+        if (Massaleegvoertuig != null) {
+            return Massaleegvoertuig + " kg";
+        } else {
+            return "";
+        }
     }
 
     public void setMassaleegvoertuig(String Massaleegvoertuig) {
@@ -412,7 +421,11 @@ public class Car implements Serializable {
     }
 
     public String getBPM() {
-        return BPM;
+        if (BPM != null) {
+            return "€ " + BPM;
+        } else {
+            return "";
+        }
     }
 
     public void setBPM(String BPM) {
@@ -436,7 +449,11 @@ public class Car implements Serializable {
     }
 
     public String getMassarijklaar() {
-        return Massarijklaar;
+        if (Massarijklaar != null) {
+            return Massarijklaar + " kg";
+        } else {
+            return "";
+        }
     }
 
     public void setMassarijklaar(String Massarijklaar) {
