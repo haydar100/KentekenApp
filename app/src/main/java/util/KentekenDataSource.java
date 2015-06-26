@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
+import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
@@ -35,12 +36,20 @@ public class KentekenDataSource {
     }
 
     public Car createCar(Car car) {
+
+
+        long insertId = 0;
         Car newCar = null;
         ContentValues values = new ContentValues();
         values.put(MySQLiteHelper.COLUMN_KENTEKEN, car.getKenteken());
         values.put(MySQLiteHelper.COLUMN_MERK, car.getMerk());
-        long insertId = database.insert(MySQLiteHelper.TABLE_CARS, null,
-                values);
+        try {
+
+            insertId = database.insertOrThrow(MySQLiteHelper.TABLE_CARS, null,
+                    values);
+        } catch (SQLiteConstraintException e) {
+
+        }
         Cursor cursor = database.query(MySQLiteHelper.TABLE_CARS,
                 allColumns, MySQLiteHelper.COLUMN_ID + " = " + insertId, null,
                 null, null, null);
@@ -50,6 +59,7 @@ public class KentekenDataSource {
         }
 
         return newCar;
+
     }
 
     public void deleteCar(Car car) {

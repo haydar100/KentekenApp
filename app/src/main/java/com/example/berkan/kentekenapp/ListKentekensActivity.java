@@ -1,7 +1,6 @@
 package com.example.berkan.kentekenapp;
 
 import android.app.ListActivity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
@@ -12,7 +11,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import domain.Car;
 import json.JSONParser;
@@ -49,22 +47,13 @@ public class ListKentekensActivity extends ListActivity {
 
                 for (int i = 0; i < carList.size(); i++) {
                     if (carList.get(position) != null) {
+                        
                         String kenteken = carList.get(position).getKenteken();
-                        try {
-                            car = new JSONParser().execute(kenteken).get();
+                        new JSONParser(ListKentekensActivity.this, datasource).execute(kenteken);
 
-
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        } catch (ExecutionException e) {
-                            e.printStackTrace();
-                        }
                     }
                 }
 
-                Intent intent = new Intent(ListKentekensActivity.this, CarDetailActivity.class);
-                intent.putExtra("carObject", car);
-                startActivity(intent);
 
             }
         });

@@ -2,9 +2,11 @@ package json;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.example.berkan.kentekenapp.CarDetailActivity;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -24,12 +26,14 @@ import java.util.Scanner;
 import domain.Car;
 import domain.ImageResult;
 import util.DateDeserializer;
+import util.KentekenDataSource;
 
 /**
  * Created by Haydar on 28-05-15.
  */
 public class JSONParser extends AsyncTask<String, String, Car> {
 
+    KentekenDataSource dataSource;
     ProgressDialog progress;
     Activity mActivity;
 
@@ -37,8 +41,9 @@ public class JSONParser extends AsyncTask<String, String, Car> {
     public JSONParser() {
     }
 
-    public JSONParser(Activity mActivity) {
+    public JSONParser(Activity mActivity, KentekenDataSource dataSource) {
         this.mActivity = mActivity;
+        this.dataSource = dataSource;
     }
 
     public static JSONObject requestImageFromWebservice(String serviceUrl) {
@@ -126,11 +131,17 @@ public class JSONParser extends AsyncTask<String, String, Car> {
         return null;
     }
 
-
     private static String getResponseText(InputStream inStream) {
         return new Scanner(inStream).useDelimiter("\\A").next();
     }
 
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        progress = new ProgressDialog(mActivity);
+        progress.setMessage("Gegevens ophalen...");
+        progress.show();
+    }
 
     @Override
     protected Car doInBackground(String... strings) {
@@ -179,5 +190,22 @@ public class JSONParser extends AsyncTask<String, String, Car> {
         return carObj;
     }
 
+    @Override
+    protected void onPostExecute(Car car) {
+        if (progress.isShowing()) {
+            progress.dismiss();
+        }
+        if (car != null) {
+            Intent intent = new Intent(this.mActivity, CarDetailActivity.class);
+            intent.putExtra("carObject", car);
+            mActivity.startActivity(intent);
 
+            dataSource.open();
+            dataSource.createCar(car);
+
+        } else {
+            Log.d("Car object is empty", "Car is empty");
+        }
+        super.onPostExecute(car);
+    }
 }

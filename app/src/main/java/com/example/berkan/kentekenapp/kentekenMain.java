@@ -3,14 +3,12 @@ package com.example.berkan.kentekenapp;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
 
 import domain.Car;
@@ -43,40 +41,20 @@ public class kentekenMain extends Activity {
 
     public void OK(View v) {
 
-        try {
+        System.out.println(String.valueOf(ingevuldeKenteken));
+        String kentekenInput = ingevuldeKenteken.getText().toString();
+        String kentekenRegex = kentekenInput.replaceAll("[\\-\\+\\.\\^:,]", ""); // in het geval dat een gebruiker xx-xx-xx gebruikt of wat dan ook, dan wordt dat gereplaced
+        System.out.print(kentekenRegex.toString());
 
-            System.out.println(String.valueOf(ingevuldeKenteken));
-            String kentekenInput = ingevuldeKenteken.getText().toString();
-            String kentekenRegex = kentekenInput.replaceAll("[\\-\\+\\.\\^:,]", ""); // in het geval dat een gebruiker xx-xx-xx gebruikt of wat dan ook, dan wordt dat gereplaced
-            System.out.print(kentekenRegex.toString());
-
-            if (checkKenteken(kentekenRegex) != -1) {
-                // Als kenteken klopt, dan pas mag de JSONParser het proberen
-                carObj = new JSONParser(this).execute(kentekenRegex).get();
-
-            } else {
-                Toast.makeText(this, "Geen geldig kenteken", Toast.LENGTH_LONG).show();
-            }
+        if (checkKenteken(kentekenRegex) != -1) {
+            // Als kenteken klopt, dan pas mag de JSONParser het proberen
+            new JSONParser(this, datasource).execute(kentekenRegex);
 
 
-            if (carObj != null) {
-                Intent intent = new Intent(this, CarDetailActivity.class);
-                intent.putExtra("carObject", carObj);
-
-
-                startActivity(intent);
-                datasource.createCar(carObj);
-
-            } else {
-                Log.d("Car object is empty", "Car is empty");
-            }
-
-
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
+        } else {
+            Toast.makeText(this, "Geen geldig kenteken", Toast.LENGTH_LONG).show();
         }
+
 
     }
 
